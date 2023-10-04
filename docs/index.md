@@ -3,7 +3,7 @@
 
 {% include button.html button_name="My Button" button_class="primary" %}
 
-<img src="https://github.com/HannahHaensen/DynaMoN/assets/22636930/e1e407ef-4249-4e5e-bc38-486e08204548" width=50% height=50%>
+<img src="https://user-images.githubusercontent.com/22636930/231704635-d8697cbe-bce4-4907-a306-04b9ea654e96.png" width="50%" height="50%"/> 
 
 **Mert Asim Karaoglu (1,3)∗, Hannah Schieber (2)∗, Nicolas Schischka (1)∗, Melih Gorgulu(1)*, Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and Benjamin Busam1**
 
