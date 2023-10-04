@@ -27,21 +27,6 @@ DynaMoN enables better visual results in dynamic scenes.
 
 ![Screenshot from 2023-10-04 16-11-08](https://github.com/HannahHaensen/DynaMoN/assets/22636930/320af141-1639-4e43-8571-e37416cc392e)
 
-# Results
-
-## Camera Localization Quality
-
-![Screenshot from 2023-10-04 16-11-45](https://github.com/HannahHaensen/DynaMoN/assets/22636930/02b45d25-9275-48b6-b7e9-09c55af8ace4)
-
-![Screenshot from 2023-10-04 16-12-17](https://github.com/HannahHaensen/DynaMoN/assets/22636930/e0738738-144e-4a88-b72a-16518522130b)
-
-## Novel View Synthesis Quality
-
-![Screenshot from 2023-10-04 16-13-05](https://github.com/HannahHaensen/DynaMoN/assets/22636930/b04b9ffe-c051-4b34-bee0-6721b8330977)
-
-![Screenshot from 2023-10-04 16-13-16](https://github.com/HannahHaensen/DynaMoN/assets/22636930/d409d186-b54c-4781-85af-8dc5d2a72dc0)
-
-
 # Citation
 
 You do something similar? or use parts from our code here you can cite our paper:
