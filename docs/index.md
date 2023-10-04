@@ -18,8 +18,6 @@
   <li>(5)Johns Hopkins University, Baltimore, MD, USA</li>
 </ul>
 
-<br>
-
 contact e-mail: mert.karaoglu[at]tum.de, hannah.schieber[at]fau.de
 </font> 
 
@@ -29,13 +27,15 @@ contact e-mail: mert.karaoglu[at]tum.de, hannah.schieber[at]fau.de
 
 # Visual improvements
 
-DynaMoN enables better visual results in dynamic scenes.
+<font size="1"> DynaMoN enables better visual results in dynamic scenes.</font> 
 
 ![Screenshot from 2023-10-04 16-09-36](https://github.com/HannahHaensen/DynaMoN/assets/22636930/31ebebd1-4c01-4645-85f7-0f7aecb37ff9)
 
 # Citation
 
+<font size="1"> 
 You do something similar? or use parts from our code here you can cite our paper:
+</font> 
 
 ```
 @misc{2023DynaMoN,
