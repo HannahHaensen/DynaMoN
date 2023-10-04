@@ -1,5 +1,5 @@
 
-[Paper](https://arxiv.org/pdf/2309.08927.pdf) [(Code (coming soon))](https://github.com/HannahHaensen/DynaMoN/tree/main)
+[Paper](https://arxiv.org/pdf/2309.08927.pdf) | [(Code (coming soon))](https://github.com/HannahHaensen/DynaMoN/tree/main)
 
 {% include button.html button_name="My Button" button_class="primary" %}
 
