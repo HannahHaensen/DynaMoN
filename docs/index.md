@@ -32,7 +32,7 @@ DynaMoN enables better visual results in dynamic scenes.
 You do something similar? or use parts from our code here you can cite our paper:
 
 ```
-@misc{schieber2023nerftrinsic,
+@misc{2023DynaMoN,
   title={DynaMoN: Motion-Aware Fast And Robust Camera Localization for Dynamic NeRF},
   author={Karaoglu, Mert Asim and Schieber, Hannah and Schischka, Nicolas and G{\"o}rg{\"u}l{\"u}, Melih and Gr{\"o}tzner, Florian and Ladikos, Alexander and Roth, Daniel and Navab, Nassir and Busam, Benjamin},
   journal={arXiv preprint arXiv:2309.08927},
