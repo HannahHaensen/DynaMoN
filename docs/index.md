@@ -1,10 +1,6 @@
 
 [Paper](https://arxiv.org/pdf/2309.08927.pdf) | [(Code (coming soon))](https://github.com/HannahHaensen/DynaMoN/tree/main)
 
-{% include button.html button_name="My Button" button_class="primary" %}
-
-
-
 <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/22636930/272610460-e1e407ef-4249-4e5e-bc38-486e08204548.png" width="50%" height="50%"/> 
 
 <font size="12"> 
