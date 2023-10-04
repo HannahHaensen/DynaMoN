@@ -1,5 +1,5 @@
 
-![Screenshot from 2023-10-04 16-11-08](https://github.com/HannahHaensen/DynaMoN/assets/22636930/320af141-1639-4e43-8571-e37416cc392e)
+![Screenshot from 2023-10-04 16-22-47](https://github.com/HannahHaensen/DynaMoN/assets/22636930/a752b2a0-b8f8-40b0-8e7e-3e3fcd017508)
 
 **Mert Asim Karaoglu (1,3)∗, Hannah Schieber (2)∗, Nicolas Schischka (1)∗, Melih Gorgulu(1)*, Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and Benjamin Busam1**
 
@@ -16,6 +16,10 @@ contact e-mail: mert.karaoglu[at]tum.de, hannah.schieber[at]fau.de
 # Overview
 
 [Paper](https://arxiv.org/pdf/2309.08927.pdf) 
+
+# Architecture
+
+![Screenshot from 2023-10-04 16-11-08](https://github.com/HannahHaensen/DynaMoN/assets/22636930/320af141-1639-4e43-8571-e37416cc392e)
 
 # Visual improvements
 
