@@ -22,8 +22,9 @@
 contact e-mail: mert.karaoglu[at]tum.de, hannah.schieber[at]fau.de
 </font> 
 <br>
+<br>
 
-</center>
+
 
 # Architecture
 
@@ -41,7 +42,7 @@ contact e-mail: mert.karaoglu[at]tum.de, hannah.schieber[at]fau.de
 You do something similar? or use parts from our code here you can cite our paper:
 </font> 
 
-
+</center>
 
 ```
 @misc{2023DynaMoN,
