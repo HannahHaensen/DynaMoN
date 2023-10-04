@@ -1,5 +1,5 @@
 
-![Screenshot from 2023-10-04 16-22-47](https://github.com/HannahHaensen/DynaMoN/assets/22636930/a752b2a0-b8f8-40b0-8e7e-3e3fcd017508)
+[<img src="Screenshot from 2023-10-04 16-22-47" width="250"/>](https://github.com/HannahHaensen/DynaMoN/assets/22636930/a752b2a0-b8f8-40b0-8e7e-3e3fcd017508)
 
 **Mert Asim Karaoglu (1,3)∗, Hannah Schieber (2)∗, Nicolas Schischka (1)∗, Melih Gorgulu(1)*, Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and Benjamin Busam1**
 
