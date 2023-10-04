@@ -1,4 +1,5 @@
 
+![Screenshot from 2023-10-04 16-11-08](https://github.com/HannahHaensen/DynaMoN/assets/22636930/320af141-1639-4e43-8571-e37416cc392e)
 
 **Mert Asim Karaoglu (1,3)∗, Hannah Schieber (2)∗, Nicolas Schischka (1)∗, Melih Gorgulu(1)*, Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and Benjamin Busam1**
 
@@ -21,11 +22,6 @@ contact e-mail: mert.karaoglu[at]tum.de, hannah.schieber[at]fau.de
 DynaMoN enables better visual results in dynamic scenes.
 
 ![Screenshot from 2023-10-04 16-09-36](https://github.com/HannahHaensen/DynaMoN/assets/22636930/31ebebd1-4c01-4645-85f7-0f7aecb37ff9)
-
-
-# Architecture
-
-![Screenshot from 2023-10-04 16-11-08](https://github.com/HannahHaensen/DynaMoN/assets/22636930/320af141-1639-4e43-8571-e37416cc392e)
 
 # Citation
 
