@@ -4,7 +4,7 @@
 <center>
 <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/22636930/272610460-e1e407ef-4249-4e5e-bc38-486e08204548.png" width="50%" height="50%"/> 
 
-
+<br>
 <font size="1"> 
 <b>Mert Asim Karaoglu (1,3)∗, Hannah Schieber (2)∗, Nicolas Schischka (1)∗, Melih Gorgulu(1)*,<br> Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and Benjamin Busam1**</b>
 
