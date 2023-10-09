@@ -13,10 +13,10 @@
 <br>
 
 <br>(1) Technical University of Munich, Munich, Germany
-<br>(2) Hannah Schieber is with the Friedrich-Alexander Universitat Erlangen-Nürnberg, Erlangen, Germany
+<br>(2) Friedrich-Alexander Universitat Erlangen-Nürnberg, Erlangen, Germany
 <br>(3) ImFusion GmbH, Munich, Germany
 <br>(4) Technical University of Munich, School of Medicine and Health, Klinikum rechts der Isar, Orthopaedics and Sports Orthopaedics, Munich, Germany
-<br>(5)Johns Hopkins University, Baltimore, MD, USA
+<br>(5) Johns Hopkins University, Baltimore, MD, USA
 <br>
 
 contact e-mail: mert.karaoglu[at]tum.de, hannah.schieber[at]fau.de
