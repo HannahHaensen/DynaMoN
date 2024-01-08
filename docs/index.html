@@ -16,7 +16,98 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
+        .img-comp-container {
+            position: relative;
+            height: 200px;
+        }
+
+        .img-comp-img {
+            position: absolute;
+            width: auto;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .img-comp-img img {
+            display: block;
+        }
+
+        .img-comp-slider {
+            position: absolute;
+            z-index: 9;
+            cursor: ew-resize;
+            width: 40px;
+            height: 40px;
+            background-color: #020202;
+            opacity: 0.7;
+            border-radius: 50%;
+        }
+    </style>
+    <script>
+        function compare() {
+            var x, i;
+            x = document.getElementsByClassName("img-comp-overlay");
+            for (i = 0; i < x.length; i++) {
+                compareImages(x[i]);
+            }
+
+            function compareImages(img) {
+
+                var slider, img, clicked = 0, w, h;
+                w = img.offsetWidth;
+                h = img.offsetHeight;
+                img.style.width = (w / 2) + "px";
+
+                slider = document.createElement("DIV");
+                slider.setAttribute("class", "img-comp-slider");
+                img.parentElement.insertBefore(slider, img);
+                slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
+                slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
+
+                slider.addEventListener("mousedown", slideReady);
+                window.addEventListener("mouseup", slideFinish);
+
+                function slideReady(e) {
+                    e.preventDefault();
+                    clicked = 1;
+                    window.addEventListener("mousemove", slideMove);
+                    window.addEventListener("touchmove", slideMove);
+                }
+
+                function slideFinish() {
+                    clicked = 0;
+                }
+
+                function slideMove(e) {
+                    var pos;
+                    if (clicked == 0) return false;
+                    pos = getCursorPos(e)
+                    if (pos < 0) pos = 0;
+                    if (pos > w) pos = w;
+                    slide(pos);
+                }
+
+                function getCursorPos(e) {
+                    var a, x = 0;
+                    e = (e.changedTouches) ? e.changedTouches[0] : e;
+                    a = img.getBoundingClientRect();
+                    x = e.pageX - a.left;
+                    x = x - window.pageXOffset;
+                    return x;
+                }
+
+                function slide(x) {
+                    img.style.width = x + "px";
+                    slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
+                }
+            }
+        }
+    </script>
 
 </head>
 
@@ -24,28 +115,41 @@
 <div class="container">
     <br>
     <br>
-    <h1 style="align-content: center; text-align: center">DynaMoN: Motion-Aware Fast And Robust Camera
-Localization for Dynamic NeRF</h1>
-    <h5></h5>
-    <div class="row">
-        <div class="col-md-6"></div>
-    </div>
     <br>
-    <div class="row" style="align-content: center; text-align: center">
-
-        <div class="col-md-6">
-            <a href="https://arxiv.org/pdf/2309.08927.pdf">
-                <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/paper.png?raw=true"
-                     style="width: 120px; border: 1px black solid"></a>
-            <p>arixv</p>
+    <br>
+    <h1 style="align-content: center; text-align: center">DynaMoN: Motion-Aware Fast And Robust Camera
+        Localization for Dynamic NeRF</h1>
+    <h5></h5>
+    <br>
+    <br>
+    <div class="row" style="align-content: center; text-align: center; margin-bottom: 50px;">
+        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center">
+            <h5>COLMAP + HexPlane</h5>
+            <img width="350" height="263"
+                 src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true">
         </div>
-        <div class="col-md-6">
-            <a href="https://github.com/HannahHaensen/DynaMoN">
-                <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/code.png?raw=true"
-                     style="width: 300px; border: 1px black solid"></a>
-            <p>Code (coming soon)</p>
+        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center">
+            <h5>DynaMoN</h5>
+            <img width="350" height="263"
+                 src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true">
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center;">
+            <h5>Compare</h5>
+            <div class="img-comp-container">
+                <div class="img-comp-img">
+                    <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true"
+                        width="350" height="263">
+                </div>
+                <div class="img-comp-img img-comp-overlay">
+                    <img id="imageid" src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true"
+                        width="350" height="263">
+                </div>
+            </div>
         </div>
     </div>
+
+    <br>
+    <br>
     <div class="row" style="align-content: center; text-align: center">
         <div class="col-md-12">
             <b>Mert Asim Karaoglu (1,3), Hannah Schieber (2,4), Nicolas Schischka (1), Melih Gorgulu(1),
@@ -85,6 +189,22 @@ Localization for Dynamic NeRF</h1>
 
         </div>
     </div>
+    <br>
+    <div class="row" style="align-content: center; text-align: center">
+
+        <div class=" col-lg-6 col-md-12 col-sm-12">
+            <a href="https://arxiv.org/pdf/2309.08927.pdf">
+                <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/paper.png?raw=true"
+                     style="width: 120px; border: 1px black solid"></a>
+            <p>arixv</p>
+        </div>
+        <div class=" col-lg-6 col-md-12 col-sm-12">
+            <a href="https://github.com/HannahHaensen/DynaMoN">
+                <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/code.png?raw=true"
+                     style="width: 300px; border: 1px black solid"></a>
+            <p>Code (coming soon)</p>
+        </div>
+    </div>
 
     <br>
     <div class="row">
@@ -92,16 +212,22 @@ Localization for Dynamic NeRF</h1>
     </div>
     <div class="row">
 
-         <div class="col-6">
+        <div class="col-6">
             <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/22636930/272610460-e1e407ef-4249-4e5e-bc38-486e08204548.png"
                  style="width: 80%">
-         </div>
+        </div>
         <div class="col-6">
             <br>
             <p>
-                Dynamic reconstruction with neural radiance fields (NeRF) requires accurate camera poses. These are often hard to retrieve with existing structure-from-motion (SfM) pipelines as both camera and scene content can change. We
-propose DynaMoN that leverages simultaneous localization and mapping (SLAM) jointly with motion masking to handle dynamic scene content. Our robust SLAM-based tracking module
-significantly accelerates the training process of the dynamic NeRF while improving the quality of synthesized views at the same time. Extensive experimental validation on TUM RGB-D, BONN RGB-D Dynamic and the DyCheck’s iPhone dataset, three real-world datasets, shows the advantages of DynaMoN both for camera pose estimation and novel view synthesis.
+                Dynamic reconstruction with neural radiance fields (NeRF) requires accurate camera poses. These are
+                often hard to retrieve with existing structure-from-motion (SfM) pipelines as both camera and scene
+                content can change. We
+                propose DynaMoN that leverages simultaneous localization and mapping (SLAM) jointly with motion masking
+                to handle dynamic scene content. Our robust SLAM-based tracking module
+                significantly accelerates the training process of the dynamic NeRF while improving the quality of
+                synthesized views at the same time. Extensive experimental validation on TUM RGB-D, BONN RGB-D Dynamic
+                and the DyCheck’s iPhone dataset, three real-world datasets, shows the advantages of DynaMoN both for
+                camera pose estimation and novel view synthesis.
             </p>
         </div>
     </div>
@@ -149,8 +275,10 @@ significantly accelerates the training process of the dynamic NeRF while improvi
         </div>
     </div>
 </div>
-</div>
-
+<script>
+    /*Execute the Function*/
+    compare();
+</script>
 
 </body>
 </html>
