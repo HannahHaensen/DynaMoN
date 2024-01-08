@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Hannah Schieber</title>
+
+    <meta name="author" content="Hannah Schieber">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="DynaMoN"
+          property="og:title">
+    <meta content="DynaMoN"
+          property="description">
+    <meta content="different intrinsic and extrinsic camera parameters" property="description">
+    <meta content="nerf camera parameters" property="description">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+</head>
+
+<body>
+<div class="container">
+    <br>
+    <br>
+    <h1 style="align-content: center; text-align: center">NeRFtrinsic Four: An End-To-End Trainable NeRF Jointly
+        Optimizing Diverse Intrinsic and Extrinsic Camera Parameters</h1>
+    <h5></h5>
+
+    <div class="row" style="align-content: center; text-align: center">
+        <div class="col-md-12">
+            <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/22636930/272610460-e1e407ef-4249-4e5e-bc38-486e08204548.png"
+                 style="width: 30%">
+        </div>
+    </div>
+    <br>
+    <div class="row" style="align-content: center; text-align: center">
+        <div class="col-md-12">
+            <b>Mert Asim Karaoglu (1,3), Hannah Schieber (2,4), Nicolas Schischka (1), Melih Gorgulu(1),
+                <br> Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and Benjamin
+                Busam (1)</b>
+
+        </div>
+    </div>
+    <br>
+    <div class="row" style="align-content: center; text-align: center">
+        <div class="col-md-4 col-sm-12">
+            Technical University of Munich, Munich, Germany
+            <sup>1</sup>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            Friedrich-Alexander Universitat Erlangen-Nürnberg, Erlangen, Germany
+            <sup>2</sup>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            ImFusion GmbH, Munich, Germany
+            <sup>3</sup>
+        </div>
+    </div>
+    <div class="row" style="align-content: center; text-align: center">
+        <div class="col-md-3 col-sm-12">
+
+        </div>
+        <div class="col-md-3 col-sm-12">
+            Technical University of Munich, School of Medicine and Health, Klinikum rechts der Isar, Orthopaedics and
+            Sports Orthopaedics, Munich, Germany
+            <sup>4</sup>
+        </div>
+        <div class="col-md-3 col-sm-12">
+            Johns Hopkins University, Baltimore, MD, USA
+            <sup>4</sup>
+        </div>
+        <div class="col-md-3 col-sm-12">
+
+        </div>
+    </div>
+    <br>
+    <div class="row" style="align-content: center; text-align: center">
+
+        <div class="col-md-6">
+            <a href="https://arxiv.org/pdf/2309.08927.pdf">
+                <img src="https://github.com/HannahHaensen/DynaMoN/blob/main/figures/paper.png"
+                     style="width: 150px; border: 1px black solid"></a>
+            <p>arixv</p>
+        </div>
+        <div class="col-md-6">
+            <a href="https://github.com/HannahHaensen/nerftrinsic_four">
+                <img src="https://github.com/HannahHaensen/DynaMoN/blob/main/figures/code.png"
+                     style="width: 150px; border: 1px black solid"></a>
+            <p>Code (coming soon)</p>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <h3>Abstract</h3>
+        <div class="col-md-12">
+            <p>
+                Dynamic reconstruction with neural radiance fields (NeRF) requires accurate camera poses. These are often hard to retrieve with existing structure-from-motion (SfM) pipelines as both camera and scene content can change. We
+propose DynaMoN that leverages simultaneous localization and mapping (SLAM) jointly with motion masking to handle dynamic scene content. Our robust SLAM-based tracking module
+significantly accelerates the training process of the dynamic NeRF while improving the quality of synthesized views at the same time. Extensive experimental validation on TUM RGB-D, BONN RGB-D Dynamic and the DyCheck’s iPhone dataset, three real-world datasets, shows the advantages of DynaMoN both for camera pose estimation and novel view synthesis.
+            </p>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <h3>Architecture</h3>
+        <div class="col-md-12" style="align-content: center; text-align: center">
+            <img src="https://github.com/HannahHaensen/DynaMoN/assets/22636930/320af141-1639-4e43-8571-e37416cc392e"
+                 style="width: 80%">
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <h3>Results</h3>
+    </div>
+    <div class="row">
+        <h5>Visual Improvements</h5>
+        <br>
+        <div class="col-md-12">
+            <p>DynaMoN enables better visual results in dynamic scenes.</p>
+        </div>
+        <div class="col-md-12" style="align-content: center; text-align: center">
+            <img src="https://github.com/HannahHaensen/DynaMoN/assets/22636930/31ebebd1-4c01-4645-85f7-0f7aecb37ff9"
+                 style="width: 80%">
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <h3>Citation</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <p style="background: lightgray; margin: 10px; padding: 10px;">
+                @misc{@misc{2023DynaMoN,<br>
+                &nbsp&nbsptitle={DynaMoN: Motion-Aware Fast And Robust Camera Localization for Dynamic NeRF},<br>
+                &nbsp&nbspauthor={Karaoglu, Mert Asim and Schieber, Hannah and Schischka, Nicolas and
+                G{\"o}rg{\"u}l{\"u}, Melih and Gr{\"o}tzner, Florian and Ladikos, Alexander and Roth, Daniel and Navab,
+                Nassir and Busam, Benjamin},<br>
+                &nbsp&nbspjournal={arXiv preprint arXiv:2309.08927},<br>
+                &nbsp&nbspyear={2023}<br>
+                }
+            </p>
+        </div>
+    </div>
+</div>
+</div>
+
+
+</body>
+</html>
