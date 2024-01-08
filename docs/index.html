@@ -112,51 +112,24 @@
 </head>
 
 <body>
-<div class="container">
+<section style="background: rgba(25, 12, 12, 0.04)">
+    <div class="container">
     <br>
     <br>
     <br>
     <br>
     <h1 style="align-content: center; text-align: center">DynaMoN: Motion-Aware Fast And Robust Camera
         Localization for Dynamic NeRF</h1>
-    <h5></h5>
-    <br>
-    <br>
-    <div class="row" style="align-content: center; text-align: center; margin-bottom: 80px;">
-        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center">
-            <h5>COLMAP + HexPlane</h5>
-            <img width="350" height="263"
-                 src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true">
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center">
-            <h5>DynaMoN</h5>
-            <img width="350" height="263"
-                 src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true">
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center;">
-            <h5>Compare</h5>
-            <div class="img-comp-container">
-                <div class="img-comp-img">
-                    <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true"
-                        width="350" height="263">
-                </div>
-                <div class="img-comp-img img-comp-overlay">
-                    <img id="imageid" src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true"
-                        width="350" height="263">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="align-content: center; text-align: center">
+     <div class="row" style="align-content: center; text-align: center">
         <div class="col-md-12">
-            <b>Mert Asim Karaoglu (1,3), Hannah Schieber (2,4), Nicolas Schischka (1), Melih Gorgulu(1),
+            <b>Mert Asim Karaoglu* (1,3), Hannah Schieber* (2,4), Nicolas Schischka* (1), Melih Gorgulu* (1),
                 <br> Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and Benjamin
                 Busam (1)</b>
+            <p>* indicates equal contribution</p>
 
         </div>
+
     </div>
-    <br>
     <div class="row" style="align-content: center; text-align: center">
         <div class="col-md-2 col-sm-6">
             Technical University of Munich, <br>
@@ -187,24 +160,64 @@
 
         </div>
     </div>
-    <br>
     <div class="row" style="align-content: center; text-align: center">
 
         <div class=" col-lg-6 col-md-12 col-sm-12">
             <a href="https://arxiv.org/pdf/2309.08927.pdf">
                 <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/paper.png?raw=true"
-                     style="width: 120px; border: 1px black solid"></a>
+                     style="width: 50px; border: 1px black solid"></a>
             <p>arixv</p>
         </div>
         <div class=" col-lg-6 col-md-12 col-sm-12">
             <a href="https://github.com/HannahHaensen/DynaMoN">
-                <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/code.png?raw=true"
-                     style="width: 300px; border: 1px black solid"></a>
+                <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/github.png?raw=true"
+                     style="width: 50px;"></a>
             <p>Code (coming soon)</p>
         </div>
     </div>
-
+    </div>
+</section>
+<section>
+    <div class="container">
     <br>
+    <div class="row" style="align-content: center;">
+        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center">
+            <h5>COLMAP + HexPlane</h5>
+            <img width="350" height="263"
+                 src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true">
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center">
+            <h5>DynaMoN</h5>
+            <img width="350" height="263"
+                 src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true">
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4" style="align-content: center; text-align: center;">
+            <h5>Compare</h5>
+            <div class="img-comp-container">
+                <div class="img-comp-img">
+                    <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true"
+                        width="350" height="263">
+                </div>
+                <div class="img-comp-img img-comp-overlay">
+                    <img id="imageid" src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true"
+                        width="350" height="263">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <p>We present DynaMoN, a motion aware fast and robust camera localization approach for novel view synthesis.
+        DynaMoN can handle not only the motion of known objects
+        using semantic segmentation masks but also that of unknown objects using a motion segmentation mask.
+        Furthermore, it retrieves the camera poses faster and more robust compared to classical SfM approaches enabling
+        a more accurate
+        4D scene representation. Compared to the state-of-the-art, DynaMoN outperforms other dynamic camera localization
+        approaches and shows better results for novel view synthesis.</p>
+    <br>
+
+
+
+
     <div class="row">
         <h3>Abstract</h3>
     </div>
@@ -273,6 +286,7 @@
         </div>
     </div>
 </div>
+</section>
 <script>
     /*Execute the Function*/
     compare();
