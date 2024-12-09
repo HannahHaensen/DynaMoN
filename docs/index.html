@@ -7,6 +7,7 @@
 
     <meta name="author" content="Hannah Schieber">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
     <meta content="DynaMoN: Motion-Aware Fast And Robust Camera Localization for Dynamic NeRF"
           property="og:title">
     <meta content="DynaMoN: Motion-Aware Fast And Robust CameraLocalization for Dynamic NeRF"
@@ -18,97 +19,522 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- jQuery für Bildwechsel -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
 
-        .img-comp-container {
-            position: relative;
-            height: 200px;
-        }
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /** global: Hammer */
+            ;(function ($, window) {
+                "use strict";
 
-        .img-comp-img {
-            position: absolute;
-            width: auto;
-            height: auto;
-            overflow: hidden;
-        }
-
-        .img-comp-img img {
-            display: block;
-        }
-
-        .img-comp-slider {
-            position: absolute;
-            z-index: 9;
-            cursor: ew-resize;
-            width: 40px;
-            height: 40px;
-            background-color: #020202;
-            opacity: 0.7;
-            border-radius: 50%;
-        }
-    </style>
-    <script>
-        function compare() {
-            var x, i;
-            x = document.getElementsByClassName("img-comp-overlay");
-            for (i = 0; i < x.length; i++) {
-                compareImages(x[i]);
-            }
-
-            function compareImages(img) {
-
-                var slider, img, clicked = 0, w, h;
-                w = img.offsetWidth;
-                h = img.offsetHeight;
-                img.style.width = (w / 2) + "px";
-
-                slider = document.createElement("DIV");
-                slider.setAttribute("class", "img-comp-slider");
-                img.parentElement.insertBefore(slider, img);
-                slider.style.top = (h / 2) - (slider.offsetHeight / 2) + "px";
-                slider.style.left = (w / 2) - (slider.offsetWidth / 2) + "px";
-
-                slider.addEventListener("mousedown", slideReady);
-                window.addEventListener("mouseup", slideFinish);
-
-                function slideReady(e) {
-                    e.preventDefault();
-                    clicked = 1;
-                    window.addEventListener("mousemove", slideMove);
-                    window.addEventListener("touchmove", slideMove);
+                function stringRepeat(s, precision) {
+                    // String repeat polyfill
+                    if (!String.prototype.repeat) {
+                        precision = precision || 1;
+                        return new Array(precision + 1).join(s);
+                    }
+                    return s.repeat(precision);
                 }
 
-                function slideFinish() {
-                    clicked = 0;
+                var pluginName = 'imagesCompare',
+                    defaults = {
+                        initVisibleRatio: 0.5,
+                        interactionMode: "drag", // "drag", "mousemove", "click"
+                        animationDuration: 400, // default animation duration in ms
+                        animationEasing: "swing",
+                        addSeparator: true, // add a html element on the separation
+                        addDragHandle: true, // add a html drag handle element on the separation
+                        precision: 4
+                    };
+
+                // Our object, using revealing module pattern
+                function ImagesCompare(element, options) {
+                    element = $(element);
+                    options = $.extend({}, defaults, options);
+                    options.roundFactor = parseInt('1' + stringRepeat('0', options.precision));
+
+                    this._name = pluginName;
+
+                    var frontElement, backElement, separator, dragHandle, lastRatio = 1, size = {
+                        width: 0,
+                        height: 0,
+                        maxWidth: 0,
+                        maxHeight: 0
+                    }, events = {
+                        initialised: "imagesCompare:initialised",
+                        changed: "imagesCompare:changed",
+                        resized: "imagesCompare:resized"
+                    };
+
+                    function onImagesLoaded() {
+                        var images = element.find('img'),
+                            totalImagesCount = images.length,
+                            elementsLoaded = 0;
+
+                        function onImageLoaded() {
+                            if (elementsLoaded >= totalImagesCount) {
+                                init();
+                            }
+                        }
+
+                        images.each(function () {
+                            // Image already loaded (cached)
+                            if ($(this)[0].complete) {
+                                totalImagesCount--;
+                                onImageLoaded();
+                            } else {
+                                // Image loading / error
+                                $(this).on('load', function () {
+                                    elementsLoaded++;
+                                    onImageLoaded();
+                                });
+                                $(this).on('error', function () {
+                                    elementsLoaded++;
+                                    onImageLoaded();
+                                });
+                            }
+                        });
+                    }
+
+                    onImagesLoaded();
+
+                    function init() {
+                        updateDom();
+                        patchSize();
+                        initInteractions();
+
+                        $(frontElement).attr('ratio', options.initVisibleRatio);
+                        setVisibleRatio(options.initVisibleRatio);
+
+                        // Let the world know we have done the init
+                        element.trigger({
+                            type: events.initialised
+                        });
+                    }
+
+                    function addResize() {
+                        $(window).on('resize', function (event) {
+                            frontElement.css('clip', '');
+                            patchSize();
+                            setVisibleRatio(lastRatio);
+
+                            // Let the world know we have done some resize updates
+                            element.trigger({
+                                type: events.resized,
+                                originalEvent: event
+                            });
+                        });
+                    }
+
+                    function initInteractions() {
+                        options.interactionMode = options.interactionMode.toLowerCase();
+
+                        if (options.interactionMode != "drag" && options.interactionMode != "mousemove" && options.interactionMode != "click") {
+                            console.warn('No valid interactionMode found, valid values are "drag", "mousemove", "click"');
+                        }
+
+                        switch (options.interactionMode) {
+                            case "drag":
+                                initDrag();
+                                break;
+                            case "mousemove":
+                                initMouseMove();
+                                break;
+                            case "click":
+                                initClick();
+                                break;
+                            default:
+                                initDrag();
+                        }
+                    }
+
+                    function initDrag() {
+                        if (typeof Hammer == 'undefined') {
+                            console.error('Please include the hammerjs library for drag support');
+                        }
+                        addDrag();
+                        addResize();
+                    }
+
+                    function initMouseMove() {
+                        addMouseMove();
+                        addResize();
+                    }
+
+                    function initClick() {
+                        addClick();
+                        addResize();
+                    }
+
+                    function addClick() {
+                        element.on('click', function (event) {
+                            var ratio = getElementRatio(event.pageX);
+                            setVisibleRatio(ratio);
+                        });
+                    }
+
+                    function addMouseMove() {
+                        var lastMove = 0;
+                        var eventThrottle = 1;
+                        element.on('mousemove', function (event) {
+                            event.preventDefault();
+                            var now = Date.now();
+                            if (now > lastMove + eventThrottle) {
+                                lastMove = now;
+                                var ratio = getElementRatio(event.pageX);
+                                setVisibleRatio(ratio);
+                            }
+                        });
+
+                        element.on('mouseout', function (event) {
+                            var ratio = getElementRatio(event.pageX);
+                            setVisibleRatio(ratio);
+                        });
+                    }
+
+                    function addDrag() {
+                        var hammertime = new Hammer(element[0]);
+                        hammertime.get('pan').set({direction: Hammer.DIRECTION_HORIZONTAL});
+                        hammertime.on('pan', function (event) {
+                            var ratio = getElementRatio(event.srcEvent.pageX);
+                            setVisibleRatio(ratio);
+                        });
+                    }
+
+                    function updateDom() {
+                        element.addClass('images-compare-container');
+                        element.css('display', 'inline-block');
+
+                        frontElement = element.find('> *:nth-child(1)');
+                        backElement = element.find('> *:nth-child(2)');
+
+                        frontElement.addClass("images-compare-before");
+                        frontElement.css('display', 'block');
+                        backElement.addClass("images-compare-after");
+                        backElement.css('display', 'block');
+
+                        if (options.addDragHandle) {
+                            buildDragHandle();
+                        }
+
+                        if (options.addSeparator) {
+                            buildSeparator();
+                        }
+                    }
+
+                    function buildSeparator() {
+                        element.prepend("<div class='images-compare-separator'></div>");
+                        separator = element.find(".images-compare-separator");
+
+                    }
+
+                    function buildDragHandle() {
+                        element.prepend("<div class='images-compare-handle'></div>");
+                        dragHandle = element.find(".images-compare-handle");
+                        dragHandle.append("<span class='images-compare-left-arrow'></span>");
+                        dragHandle.append("<span class='images-compare-right-arrow'></span>");
+                    }
+
+                    function patchSize() {
+                        var imgRef = backElement.find('img').first();
+                        setSize(imgRef.width(), imgRef.height(), imgRef.naturalWidth(), imgRef.naturalHeight());
+                        element.css('max-width', size.maxWidth + 'px');
+                        element.css('max-height', size.maxHeight + 'px');
+                        frontElement.width(size.width);
+                        frontElement.height(size.height);
+                    }
+
+                    /**
+                     *
+                     * @param x
+                     * @return float
+                     */
+                    function getElementRatio(x) {
+                        return roundRatio((x - element.offset().left) / frontElement.width());
+                    }
+
+                    /**
+                     *
+                     * @param ratio
+                     * @return float
+                     */
+                    function roundRatio(ratio) {
+                        ratio = Math.round((ratio * options.roundFactor)) / options.roundFactor;
+                        if (ratio > 1) {
+                            ratio = 1;
+                        }
+
+                        if (ratio < 0) {
+                            ratio = 0;
+                        }
+
+                        return ratio;
+
+                    }
+
+                    /**
+                     * Animation request
+                     *
+                     * @param startValue float
+                     * @param endValue float
+                     * @param duration value in ms
+                     * @param easing linear or swing
+                     */
+                    function launchAnimation(startValue, endValue, duration, easing) {
+                        $(frontElement).attr('ratio', startValue).animate({ratio: startValue}, {
+                            duration: 0
+                        });
+
+                        $(frontElement).stop().attr('ratio', startValue).animate({ratio: endValue}, {
+                            duration: duration,
+                            easing: easing,
+                            step: function (now) {
+                                var width = getRatioValue(now);
+                                lastRatio = now;
+                                frontElement.attr('ratio', now).css('clip', 'rect(0, ' + width + 'px, ' + size.height + 'px, 0)');
+
+                                if (options.addSeparator) {
+                                    separator.css('left', width + 'px');
+                                }
+
+                                if (options.addDragHandle) {
+                                    dragHandle.css('left', width + 'px');
+                                }
+                            },
+                            done: function (animation, jumpedToEnd) {
+                                var ratio = $(frontElement).attr('ratio');
+                                // Let the world know something has changed
+                                element.trigger({
+                                    type: events.changed,
+                                    ratio: ratio,
+                                    value: getRatioValue(ratio),
+                                    animate: true,
+                                    animation: animation,
+                                    jumpedToEnd: jumpedToEnd
+                                });
+                            }
+                        });
+                    }
+
+                    /**
+                     * Get value to reach, based on a ratio
+                     *
+                     * @param ratio float
+                     * @return {number}
+                     */
+                    function getRatioValue(ratio) {
+                        ratio = Math.round((ratio * options.roundFactor)) / options.roundFactor;
+                        return Math.round(frontElement.width() * ratio);
+                    }
+
+                    /**
+                     * Change visible ratio
+                     *
+                     * @param ratio float
+                     * @param animate boolean Do we want an animation ?
+                     * @param duration in ms
+                     * @param easing 'swing', 'linear'
+                     */
+                    function setVisibleRatio(ratio, animate, duration, easing) {
+                        if (typeof animate == 'undefined') {
+                            animate = false;
+                        }
+
+                        var width = getRatioValue(ratio);
+
+                        if (animate) {
+                            var finalDuration = duration ? duration : options.animationDuration;
+                            var finalEasing = easing ? easing : options.animationEasing;
+
+                            launchAnimation(lastRatio, ratio, finalDuration, finalEasing);
+
+                            // Let the world know something has changed
+                            if (lastRatio != ratio) {
+                                element.trigger({
+                                    type: events.changed,
+                                    ratio: lastRatio,
+                                    value: width,
+                                    animate: animate
+                                });
+                            }
+
+                            return;
+
+                        } else {
+                            frontElement.stop().css('clip', 'rect(0, ' + width + 'px, ' + size.height + 'px, 0)');
+
+                            if (options.addSeparator) {
+                                $(separator).stop().css('left', width + 'px');
+                            }
+
+                            if (options.addDragHandle) {
+                                dragHandle.css('left', width + 'px');
+                            }
+                        }
+
+                        // Let the world know something has changed
+                        if (lastRatio != ratio) {
+                            element.trigger({
+                                type: events.changed,
+                                ratio: ratio,
+                                value: width,
+                                animate: animate
+                            });
+                        }
+
+                        lastRatio = ratio;
+                    }
+
+                    function setSize(width, height, maxWidth, maxHeight) {
+                        if (typeof width != 'undefined') {
+                            setWidth(width);
+                        }
+                        if (typeof height != 'undefined') {
+                            setHeight(height);
+                        }
+                        if (typeof maxWidth != 'undefined') {
+                            setMaxWidth(maxWidth);
+                        }
+                        if (typeof maxHeight != 'undefined') {
+                            setMaxHeight(maxHeight);
+                        }
+                        return size;
+                    }
+
+                    function setWidth(width) {
+                        size.width = width;
+                        return size;
+                    }
+
+                    function setMaxWidth(maxWidth) {
+                        size.maxWidth = maxWidth;
+                        return size;
+                    }
+
+                    function setHeight(height) {
+                        size.height = height;
+                        return size;
+                    }
+
+                    function setMaxHeight(maxHeight) {
+                        size.maxHeight = maxHeight;
+                        return size;
+                    }
+
+                    // public function declaration
+                    // returning element to preserve chaining
+                    return {
+                        "setValue": function (ratio, animate, duration, easing) {
+                            setVisibleRatio(ratio, animate, duration, easing);
+                            return element;
+                        },
+                        "getValue": function () {
+                            return lastRatio;
+                        },
+                        "on": function (eventName, callback) {
+                            element.on(eventName, callback);
+                            return element;
+                        },
+                        "off": function (eventName, callback) {
+                            element.off(eventName, callback);
+                            return element;
+                        },
+                        "events": function () {
+                            return events;
+                        }
+                    };
                 }
 
-                function slideMove(e) {
-                    var pos;
-                    if (clicked == 0) return false;
-                    pos = getCursorPos(e)
-                    if (pos < 0) pos = 0;
-                    if (pos > w) pos = w;
-                    slide(pos);
-                }
 
-                function getCursorPos(e) {
-                    var a, x = 0;
-                    e = (e.changedTouches) ? e.changedTouches[0] : e;
-                    a = img.getBoundingClientRect();
-                    x = e.pageX - a.left;
-                    x = x - window.pageXOffset;
-                    return x;
-                }
+                /**
+                 * Plugin declaration
+                 *
+                 * @param userOptions
+                 * @return {*}
+                 */
+                $.fn.imagesCompare = function (userOptions) {
+                    var options = $.extend(defaults, userOptions);
+                    return this.each(function () {
+                        if (!$.data(this, pluginName)) {
+                            $.data(this, pluginName, new ImagesCompare(this, options));
+                        }
+                    });
+                };
 
-                function slide(x) {
-                    img.style.width = x + "px";
-                    slider.style.left = img.offsetWidth - (slider.offsetWidth / 2) + "px";
+            })(jQuery, window, document);
+
+// http://www.jacklmoore.com/notes/naturalwidth-and-naturalheight-in-ie/
+            (function ($) {
+                var props = ['Width', 'Height'], prop, propsLength;
+
+                propsLength = props.length;
+
+                for (var index = 0; index < propsLength; index++) {
+                    prop = props[index];
+                    /*jslint loopfunc: true */
+                    (function (natural, prop) {
+                        $.fn[natural] = (natural in document.createElement('img')) ?
+                            function () {
+                                return this[0][natural];
+                            } :
+                            function () {
+                                var
+                                    node = this[0],
+                                    img,
+                                    value = 0;
+
+                                if (node.tagName.toLowerCase() === 'img') {
+                                    img = document.createElement('img');
+                                    img.src = node.src;
+                                    value = img[prop];
+                                }
+                                return value;
+                            };
+                    }('natural' + prop, prop.toLowerCase()));
+                    /*jslint loopfunc: false */
                 }
-            }
-        }
+            }(jQuery));
+            $(function () {
+                var imagesCompareElement = $('.js-img-compare').imagesCompare();
+                var imagesCompare = imagesCompareElement.data('imagesCompare');
+                var events = imagesCompare.events();
+                imagesCompare.on(events.changed, function (event) {
+                    console.log(events.changed);
+                    console.log(event.ratio);
+                    if (event.ratio < 0.4) {
+                        console.log('We see more than half of the back image');
+                    }
+                    if (event.ratio > 0.6) {
+                        console.log('We see more than half of the front image');
+                    }
+                    if (event.ratio <= 0) {
+                        console.log('We see completely back image');
+                    }
+                    if (event.ratio >= 1) {
+                        console.log('We see completely front image');
+                    }
+                });
+                $('.js-front-btn').on('click', function (event) {
+                    event.preventDefault();
+                    imagesCompare.setValue(1, true);
+                });
+                $('.js-back-btn').on('click', function (event) {
+                    event.preventDefault();
+                    imagesCompare.setValue(0, true);
+                });
+                $('.js-toggle-btn').on('click', function (event) {
+                    event.preventDefault();
+                    if (imagesCompare.getValue() >= 0 && imagesCompare.getValue() < 1) {
+                        imagesCompare.setValue(1, true);
+                    } else {
+                        imagesCompare.setValue(0, true);
+                    }
+                });
+            });
+        });
+
     </script>
 
 </head>
@@ -124,9 +550,18 @@
             Localization for Dynamic Neural Radiance Fields</h1>
         <h5 style="align-content: center; text-align: center"><i>V1: </i>DynaMoN: Motion-Aware Fast And Robust Camera
             Localization for Dynamic NeRF</h5>
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <h5 style="color: darkred; align-content: center; text-align: center">
+                    Accepted at IEEE RA-L and ICRA 2025
+                </h5>
+            </div>
+        </div>
+        <br>
         <div class="row" style="align-content: center; text-align: center">
             <div class="col-md-12">
-                <b> Nicolas Schischka* (1), Hannah Schieber* (2,4), Mert Asim Karaoglu* (1,3), Melih Gorgulu* (1),
+                <b> Nicolas Schischka* (1), Hannah Schieber* (2,4), Mert Asim Karaoglu* (1,3), Melih Gorgulu (1),
                     <br> Florian Grotzner (1), Alexander Ladikos (3), Daniel Roth (4), Nassir Navab (1,5) and
                     Benjamin
                     Busam (1)</b>
@@ -152,9 +587,7 @@
                 <sup>3</sup>
             </div>
             <div class="col-md-3 col-sm-6">
-                Technical University of Munich, School of Medicine and Health, Klinikum rechts der Isar,
-                Orthopaedics and
-                Sports Orthopaedics, Munich, Germany
+                Technical University of Munich, TUM University Hospital, Munich, Germany
                 <sup>4</sup>
             </div>
 
@@ -168,17 +601,23 @@
         </div>
         <div class="row" style="align-content: center; text-align: center">
 
-            <div class=" col-lg-6 col-md-12 col-sm-12">
+            <div class=" col-lg-4 col-md-12 col-sm-12">
                 <a href="https://arxiv.org/pdf/2309.08927.pdf">
                     <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/paper.png?raw=true"
                          style="width: 50px; border: 1px black solid"></a>
-                <p>arixv</p>
+                <p>Preprint</p>
             </div>
-            <div class=" col-lg-6 col-md-12 col-sm-12">
+            <div class=" col-lg-4 col-md-12 col-sm-12">
+                <a href="https://ieeexplore.ieee.org/document/10777295">
+                    <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/paper.png?raw=true"
+                         style="width: 50px; border: 1px black solid"></a>
+                <p>IEEE RA-L</p>
+            </div>
+            <div class=" col-lg-4 col-md-12 col-sm-12">
                 <a href="https://github.com/HannahHaensen/DynaMoN">
                     <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/github.png?raw=true"
                          style="width: 50px;"></a>
-                <p>Code (coming soon)</p>
+                <p>Code</p>
             </div>
         </div>
     </div>
@@ -199,25 +638,24 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12" style="align-content: center; text-align: center;">
                 <h5>Compare</h5>
-                <div class="img-comp-container">
-                    <div class="img-comp-img">
-                        <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true"
-                             width="350" height="263">
+                    <!-- Beginn Bildwechsel -->
+                    <div class="js-img-compare">
+                        <div style="display: none;">
+                            <span class="images-compare-label">COLMAP +<br> HexPlane </span>
+                            <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_1_.gif?raw=true" alt="Before">
+                        </div>
+                        <div>
+                            <span class="images-compare-label">Ours</span>
+                            <img src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true" alt="After">
+                        </div>
                     </div>
-                    <div class="img-comp-img img-comp-overlay">
-                        <img id="imageid"
-                             src="https://github.com/HannahHaensen/DynaMoN/blob/gh-pages/docs/assets/rgbd_dataset_freiburg3_walking_static-_2_.gif?raw=true"
-                             width="350" height="263">
-                    </div>
-                </div>
             </div>
         </div>
         <br>
         <br>
         <br>
         <p>We present DynaMoN, a motion aware fast and robust camera localization approach for novel view synthesis.
-            DynaMoN can handle not only the motion of known objects
-            using semantic segmentation masks but also that of unknown objects using a motion segmentation mask.
+            DynaMoN can handle not only the motion of known objects using semantic segmentation masks but also that of unknown objects using a motion segmentation mask.
             Furthermore, it retrieves the camera poses faster and more robust compared to classical SfM approaches
             enabling
             a more accurate
@@ -240,18 +678,7 @@
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <br>
                 <p>
-                    Dynamic reconstruction with neural radiance fields (NeRF) requires accurate camera poses. These are
-                    often hard to retrieve with existing structure-from-motion (SfM) pipelines as both camera and scene
-                    content can change. We
-                    propose DynaMoN that leverages simultaneous localization and mapping (SLAM) jointly with motion
-                    masking
-                    to handle dynamic scene content. Our robust SLAM-based tracking module
-                    significantly accelerates the training process of the dynamic NeRF while improving the quality of
-                    synthesized views at the same time. Extensive experimental validation on TUM RGB-D, BONN RGB-D
-                    Dynamic
-                    and the DyCheck’s iPhone dataset, three real-world datasets, shows the advantages of DynaMoN both
-                    for
-                    camera pose estimation and novel view synthesis.
+                    The accurate reconstruction of dynamic scenes with neural radiance fields is significantly dependent on the estimation of camera poses. Widely used structure-from-motion pipelines encounter difficulties in accurately tracking the camera trajectory when faced with separate dynamics of the scene content and the camera movement. To address this challenge, we propose Dyna mic Mo tion-Aware Fast and Robust Camera Localization for Dynamic N eural Radiance Fields (DynaMoN). DynaMoN utilizes semantic segmentation and generic motion masks to handle dynamic content for initial camera pose estimation and statics-focused ray sampling for fast and accurate novel-view synthesis. Our novel iterative learning scheme switches between training the NeRF and updating the pose parameters for an improved reconstruction and trajectory estimation quality. The proposed pipeline shows significant acceleration of the training process. We extensively evaluate our approach on two real-world dynamic datasets, the TUM RGB-D dataset and the BONN RGB-D Dynamic dataset. DynaMoN improves over the state-of-the-art both in terms of reconstruction quality and trajectory accuracy. We plan to make our code public to enhance research in this area.
                 </p>
             </div>
         </div>
